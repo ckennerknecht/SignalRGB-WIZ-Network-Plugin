@@ -59,7 +59,7 @@ class WIZController{
 
 
 	SendColorPackets(){
-		
+
 	}
 }
 */
@@ -73,14 +73,14 @@ export function Initialize(){
 	device.setName(`WIZ ${controller.modelName} Room: ${controller.roomId}`);
 	if(controller.wiztype){
 		//device.setIcon(controller.wiztype.imageUrl);
-	}	
+	}
 
 	device.addProperty({"property": "variableLedCount", label: "Leds", "type": "number", "min": 1, "max": 1, default: 1});
 	if(device.isTW){
 		device.removeProperty("forcedColor");
 		device.removeProperty("forceColor");
 	}
-	
+
 	device.setSize(1,1);
 	device.setControllableLeds(["LED 1"],[[0,0]]);
 	device.log(JSON.stringify(controller));
@@ -103,11 +103,11 @@ export function Render(){
 			const color = device.color(0,0);
 			wizpro.setPilot(color[0],color[1],color[2]);
 		}
-		
-		
+
+
 	}
-	
-		
+
+
 }
 
 export function Shutdown(suspend){
@@ -140,7 +140,7 @@ const WIZDeviceLibrary = {
 		supportCostumLedCount: false,
 		ledCount: 1
 	}
-	
+
 };
 
 export function DiscoveryService() {
@@ -152,17 +152,17 @@ export function DiscoveryService() {
 	this.firstRun = true;
 	this.IconUrl = "https://play-lh.googleusercontent.com/jhmzIodqBLQQUD2sJF_O6oawa04ocDFfQIgoH0rPOXQY3V1uVz0-FJvEieFjVO-kcJ8=w200-h200-rw";
 	this.UdpBroadcastPort = 38899;
-	this.UdpBroadcastAddress = "255.255.255.255"; //"239.255.255.250";
+	this.UdpBroadcastAddress = "192.168.0.255"
 	this.UdpListenPort = 38900;
 
 	this.CheckForDevices = function(){
 		service.log("Broadcasting device scan...");
 		service.broadcast(JSON.stringify({"method":"registration","params":{"phoneMac":"AAAAAAAAAAAA","register":false,"phoneIp":"1.2.3.4","id":"1"}}));
-		
+
 	};
 
 	this.Update = function(){
-		
+
 		for(const cont of service.controllers){
 			cont.obj.update();
 		}
@@ -179,7 +179,7 @@ export function DiscoveryService() {
 
 	};
 
-	this.Discovered = function(value) {	
+	this.Discovered = function(value) {
 
 		const packet = JSON.parse(value.response);
 		switch(packet.method){
@@ -214,8 +214,8 @@ export function DiscoveryService() {
 			default:
 				service.log(`Unknown methode ${packet.method} response`);
 				break;
-		}		
-		
+		}
+
 	};
 
 	this.Removal = function(value){
@@ -266,10 +266,10 @@ class WIZDevice{
 		}
 
 		this.DumpControllerInfo();
-		
+
 	};
 
-	
+
 
 	DumpControllerInfo(){
 		service.log(`id: ${this.id}`);
@@ -303,7 +303,7 @@ class WIZDevice{
 		if(WIZDeviceLibrary.hasOwnProperty(this.modelName)){
 			this.wiztype = WIZDeviceLibrary[this.modelName];
 		}
-		
+
 		service.updateController(this);
 	}
 
@@ -352,7 +352,7 @@ class WIZProtcol {
 			this.lastDimmR = color[0];
 			this.lastDimmG = color[1];
 			this.lastDimmB = color[2];
-			
+
 			if(r < 1 && g < 1 && b < 1){
 				this.lastBrightness = minBrightniss;
 				udp.send(this.ip,this.port,{"method":"setPilot","params":{"r":color[0],"g":color[1],"b":color[2],"dimming":minBrightniss,"speed":100}});
@@ -362,8 +362,8 @@ class WIZProtcol {
 				udp.send(this.ip,this.port,{"method":"setPilot","params":{"r":r,"g":g,"b":b,"dimming":brightness,"speed":100}});
 			}
 		}
-		
-		
+
+
 
 	}
 }
