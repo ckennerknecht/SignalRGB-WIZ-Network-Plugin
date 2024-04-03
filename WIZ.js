@@ -157,7 +157,7 @@ export function DiscoveryService() {
 
 	this.CheckForDevices = function(){
 		service.log("Broadcasting device scan on " + this.UdpBroadcastAddress + ":" + this.UdpBroadcastPort + "...");
-		service.broadcast(JSON.stringify({"method":"registration","params":{"phoneMac":"AAAAAAAAAAAA","register":false,"phoneIp":"1.2.3.4","id":"1"}}));
+		service.broadcast(JSON.stringify({ "method": "registration", "params": { "phoneMac":"AAAAAAAAAAAA","register":false,"phoneIp":"1.2.3.4","id":"1"}}));
 
 	};
 
@@ -180,8 +180,10 @@ export function DiscoveryService() {
 	};
 
 	this.Discovered = function(value) {
-
+		service.log(value);
+		service.log(value.response);
 		const packet = JSON.parse(value.response);
+		service.log(packet);
 		switch(packet.method){
 			case `registration`:
 				service.log(packet.result);
