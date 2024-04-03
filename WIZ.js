@@ -156,7 +156,7 @@ export function DiscoveryService() {
 	this.UdpListenPort = 38900;
 
 	this.CheckForDevices = function(){
-		service.log("Broadcasting device scan...");
+		service.log("Broadcasting device scan on " + this.UdpBroadcastAddress + ":" + this.UdpBroadcastPort + "...");
 		service.broadcast(JSON.stringify({"method":"registration","params":{"phoneMac":"AAAAAAAAAAAA","register":false,"phoneIp":"1.2.3.4","id":"1"}}));
 
 	};
